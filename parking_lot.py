@@ -1,4 +1,4 @@
-import numpy as np
+"""Some graph algorithms, ported from C++"""
 import math
 from enum import Enum
 
@@ -16,19 +16,21 @@ from enum import Enum
 max_sig_fig = 6
 
 def FloatEqual(a, b, sig_figs = max_sig_fig):
-    """Compares two IEEE floating values for equaltiy, to some # of s.f."""
+    """Compares two IEEE floating values for equality, to some # of s.f."""
     exponent = -min( max_sig_fig, sig_figs )
     allowable_delta = a * math.pow(10.0, exponent)
     return abs(a-b) < allowable_delta
 
 def FloatGreater(a, b, sig_figs = max_sig_fig):
+    """Compares two IEEE floating values out to some # of sig figs"""
     return (a>b) and not FloatEqual(a,b)
 
 class Distance:
     """Denotes a distance, tagged with units of measurement"""
     Units = Enum('DistanceUnits','CM INCH FOOT METER YARD)
     def __init__(self, units, value):
-        pass;
+        self.units = units
+        self.distance = value
     def get_dist(self, unit_requested):
         return self.distance*conversion(units_requested,self.units)
     def set_dist(self,new_units,new_distance):
@@ -45,27 +47,39 @@ class Distance:
     units;
     distance;
 
-//  *** instances represent a car, within the context of a parking lot
-//  _for our purposes here_, this can be a POD struct, so it is
-//
-struct car {
-  dist width, length, height;
-  string license_plate;
-};
+class Car:
+    """Represents a car, within the context of a parking lot"""
+    width
+    length
+    height
+    license_plate
+    def __init__(self, w, l, h, lic):
+        self.width = w
+        self.length = l
+        self.height = h
+        self.license_plac = lic
 
-//  *** instances represent a single uncovered parking space
-//  also POD, for our purposes here
-//
-struct parking_space {
-  dist width, length;    // uncovered, so no height
-  char row;
-  unsigned int number;
-  optional<car> occupant;
-};
-const optional<car> no_car = optional<car>();
+
+class ParkingSpace:
+    """Represents a single uncovered parking space"""
+#    width
+#    length
+#    row
+#    number
+#    occupant
+    def __init__(self, w, l, r, no):
+        self.width = w
+        self.length = l
+        self.row = r
+        self.number = no
+        self.occupant = None
+
 
 ///  instances represent a single-level parking lot
 ///
+class ParkingLot:
+
+
 class parking_lot {
 public:
   parking_lot() {};
