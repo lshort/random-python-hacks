@@ -1,4 +1,4 @@
-"""Some graph algorithms, ported from C++"""
+"""A parking lot, ported from C++"""
 import math
 from enum import Enum
 
@@ -92,7 +92,7 @@ class ParkingLot:
                 space.occupant = car
                 license_plate_map[car.license_plate] = space
                 del available_spaces[index]
-                print "Parking in " + space.row + " " + str(space.number) + "\n"
+                return (str(space.row) + "-" + str(space.number))
     def remove_car( license ):
         if license in license_plate_map.keys():
             space = license_plate_map[license]
@@ -102,7 +102,7 @@ class ParkingLot:
     def find_car( license ) :
         if license in license_plate_map.keys():
             return license_plate_map[license]
-        else
+        else:
             return None
     def find_occupant( row, number ) :
         return spaces_by_row[row][number]
@@ -136,16 +136,14 @@ if __name__ == "__main__":
     p.add_to_row( w2, l2, 'B', 1, 4 );
     p.add_to_row( w3, l3, 'C', 11, 4 );
 
+    print( p.park_car(c1) )
+    print( p.park_car(c2) )
+    print( p.park_car(c3) )
+    print( p.park_car(c4) )
 
-    p.park_car(c1)
-    p.park_car(c2)
-    p.park_car(c3)
-    p.park_car(c4)
-
-    print printable_string(p)
+    print( p.printable_string())
     p.remove_car( "PINOTNV" );
-    print printable_string(p)
+    print( p.printable_string())
 
     p.find_car("CU LTR");
     p.find_occupant('C',12);
-}
