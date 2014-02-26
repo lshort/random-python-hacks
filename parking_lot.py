@@ -2,15 +2,15 @@
 import math
 from enum import Enum
 
+""""
+  This code is organized in bottom up fashion: first the math
+  utilities, then the distance class ('dist'), then the classes 'car'
+  and 'parking_space' , then finally the 'parking_lot' class
+"""
 
-//  This code is organized in bottom up fashion: first the math
-//  utilities, then the distance class ('dist'), then the classes 'car'
-//  and 'parking_space' , then finally the 'parking_lot' class
 
-
-
-//  First, some functions to compare IEEE double precision numbers
-//
+#  First, some functions to compare IEEE double precision numbers
+#
 
 #MAX_DBL_SIG_FIG = numeric_limits<double>::digits - 1;
 max_sig_fig = 6
@@ -27,7 +27,7 @@ def FloatGreater(a, b, sig_figs = max_sig_fig):
 
 class Distance:
     """Denotes a distance, tagged with units of measurement"""
-    Units = Enum('DistanceUnits','CM INCH FOOT METER YARD)
+    Units = Enum('DistanceUnits','CM INCH FOOT METER YARD')
     def __init__(self, units, value):
         self.units = units
         self.distance = value
@@ -36,8 +36,8 @@ class Distance:
     def set_dist(self,new_units,new_distance):
         self.units = new_units
         self.distance = new_distance
-    def conversion(from, to):
-        return conversions[from]/conversions[to];
+    def conversion(fr, to):
+        return conversions[fr]/conversions[to];
     def is_greater(a, b):
         return FloatGreater( a.get_dist(Units.CM), b.get_dist(Units.CM))
     foot = 2.54*12.0
@@ -77,14 +77,14 @@ class ParkingSpace:
 
 class ParkingLot:
     """Represents a single level parking lot (no height restrictions)"""
-    add_to_row( width, length, row, first, count ):
+    def add_to_row( width, length, row, first, count ):
         row_spaces = spaces_by_row[row]
         for x in range (first, first+count):
             row_spaces[x] = ParkingSpace(width, length, row, x)
             available_spaces.append(row_spaces[x])
-    add_space( width, length, row, number ):
+    def add_space( width, length, row, number ):
         add_to_row(width, length, row, number, 1)
-    park_car( car ):
+    def park_car( car ):
         for index in range(len(available_spaces)):
             space = available_spaces[index]
             if is_greater(space.width, car.width) and \
@@ -93,20 +93,20 @@ class ParkingLot:
                 license_plate_map[car.license_plate] = space
                 del available_spaces[index]
                 print "Parking in " + space.row + " " + str(space.number) + "\n"
-    remove_car( license ):
+    def remove_car( license ):
         if license in license_plate_map.keys():
             space = license_plate_map[license]
             space.occupant = None
             del license_plate_map[license]
             available_spaces.append(space)
-    find_car( license ) :
+    def find_car( license ) :
         if license in license_plate_map.keys():
             return license_plate_map[license]
         else
             return None
-    find_occupant( row, number ) :
+    def find_occupant( row, number ) :
         return spaces_by_row[row][number]
-    printable_string():
+    def printable_string():
         retval = "Parking Lot Report\n"
         for row in spaces_by_row.keys():
             retval += "*Row " + row + "\n"
