@@ -92,6 +92,7 @@ class ParkingLot:
                 space.occupant = car
                 license_plate_map[car.license_plate] = space
                 del available_spaces[index]
+                print "Parking in " + space.row + " " + str(space.number) + "\n"
     remove_car( license ):
         if license in license_plate_map.keys():
             space = license_plate_map[license]
@@ -117,33 +118,34 @@ class ParkingLot:
 
 
 
+if __name__ == "__main__":
+    p = ParkingLot()
+    w1 = Distance(Distance.Units.METER, 2.45)
+    w2 = Distance(Distance.Units.METER, 2.6)
+    w3 = Distance(Distance.Units.METER, 2.7)
+    l1 = Distance(Distance.Units.FOOT, 17.0)
+    l2 = Distance(Distance.Units.FOOT, 19.0)
+    l3 = Distance(Distance.Units.FOOT, 21.0)
+    c1 =  Car(w1, l2, w1, string("PINOTNV") );
+    c2 =  Car(w3, l2, w1, string("133ABD") );
+    c3 =  Car(w1, l1, w1, string("166ABC") );
+    c4 =  Car(w1, l2, w1, string("CU LTR") );
 
-int main() {
-  parking_lot p;
-  dist w1(dist::METER, 2.45);
-  dist l1(dist::FOOT, 17.0);
-  dist w2(dist::METER, 2.6);
-  dist l2(dist::FOOT, 19.0);
-  dist w3(dist::METER, 2.7);
-  dist l3(dist::FOOT, 21.0);
-  car c1{ w1, l2, w1, string("PINOTNV") };
-  car c2{ w3, l2, w2, string("133ABD") };
-  car c3{ w1, l1, w1, string("166ABC") };
-  car c4{ w1, l2, w1, string("CU LTR") };
+    p.add_space( w1, l1, 'A', 1 );
+    p.add_space( w1, l1, 'A', 2 );
+    p.add_to_row( w2, l2, 'B', 1, 4 );
+    p.add_to_row( w3, l3, 'C', 11, 4 );
 
-  p.add_space( w1, l1, 'A', 1 );
-  p.add_space( w1, l1, 'A', 2 );
-  p.add_to_row( w2, l2, 'B', 1, 4 );
-  p.add_to_row( w3, l3, 'C', 11, 4 );
 
-  cout << "Park 1 " <<  p.park_car(c1) << endl;
-  cout << "Park 2 " <<  p.park_car(c2) << endl;
-  cout << "Park 3 " <<  p.park_car(c3) << endl;
-  p.park_car(c4);
+    p.park_car(c1)
+    p.park_car(c2)
+    p.park_car(c3)
+    p.park_car(c4)
 
-  cout << p;
-  p.remove_car( "PINOTNV" );
-  cout << p;
-  p.find_car("CU LTR");
-  p.find_occupant('C',12);
+    print printable_string(p)
+    p.remove_car( "PINOTNV" );
+    print printable_string(p)
+
+    p.find_car("CU LTR");
+    p.find_occupant('C',12);
 }
