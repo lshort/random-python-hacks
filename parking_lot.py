@@ -28,9 +28,11 @@ def FloatGreater(a, b, sig_figs = max_sig_fig):
 class Distance:
     """Denotes a distance, tagged with units of measurement"""
     Units = Enum('DistanceUnits','CM INCH FOOT METER YARD')
-    def __init__(self, units, value):
-        self.units = units
-        self.distance = value
+    units = None;
+    distance = None;
+    def __init__(self, d_units, d_value):
+        self.units = d_units
+        self.distance = d_value
     def get_dist(self, unit_requested):
         return self.distance*conversion(units_requested,self.units)
     def set_dist(self,new_units,new_distance):
@@ -43,78 +45,76 @@ class Distance:
     foot = 2.54*12.0
     yard = foot*3.0
     conversions = {Units.CM:1.0, Units.INCH:2.54, Units.FOOT:foot, \
-      Units.METER:100.0, Units.YARD:yd}
-    units;
-    distance;
+                   Units.METER:100.0, Units.YARD:yard}
 
 class Car:
     """Represents a car, within the context of a parking lot"""
+    width = None
+    length = None
+    height = None
+    license_plate = None
     def __init__(self, w, l, h, lic):
         self.width = w
         self.length = l
         self.height = h
         self.license_plate = lic
-    width
-    length
-    height
-    license_plate
 
 
 class ParkingSpace:
     """Represents a single uncovered parking space"""
+    width = None
+    length = None
+    row = None
+    number = None
+    occupant = None
     def __init__(self, w, l, r, no):
         self.width = w
         self.length = l
         self.row = r
         self.number = no
         self.occupant = None
-    width
-    length
-    row
-    number
-    occupant
 
 
 class ParkingLot:
     """Represents a single level parking lot (no height restrictions)"""
-    def add_to_row( width, length, row, first, count ):
-        row_spaces = spaces_by_row[row]
+    spaces_by_row = {}
+    license_plate_dict = {}
+    available_spaces = []
+    def add_to_row( self, width, length, row, first, count ):
+        row_spaces = self.spaces_by_row[row]
         for x in range (first, first+count):
             row_spaces[x] = ParkingSpace(width, length, row, x)
-            available_spaces.append(row_spaces[x])
-    def add_space( width, length, row, number ):
-        add_to_row(width, length, row, number, 1)
+            self.available_spaces.append(row_spaces[x])
+    def add_space( self, width, length, row, number ):
+        self.add_to_row(width, length, row, number, 1)
     def park_car( car ):
-        for index in range(len(available_spaces)):
-            space = available_spaces[index]
+        for index in range(len(self.available_spaces)):
+            space = self.available_spaces[index]
             if is_greater(space.width, car.width) and \
                is_greater(space.length, car.length):
                 space.occupant = car
-                license_plate_map[car.license_plate] = space
-                del available_spaces[index]
+                self.license_plate_map[car.license_plate] = space
+                del self.available_spaces[index]
                 return (str(space.row) + "-" + str(space.number))
     def remove_car( license ):
-        if license in license_plate_map.keys():
-            space = license_plate_map[license]
+        if license in self.license_plate_map.keys():
+            space = self.license_plate_map[license]
             space.occupant = None
-            del license_plate_map[license]
-            available_spaces.append(space)
+            del self.license_plate_map[license]
+            self.available_spaces.append(space)
     def find_car( license ) :
-        if license in license_plate_map.keys():
-            return license_plate_map[license]
+        if license in self.license_plate_map.keys():
+            return self.license_plate_map[license]
         else:
             return None
     def find_occupant( row, number ) :
-        return spaces_by_row[row][number]
+        return self.spaces_by_row[row][number]
     def printable_string():
         retval = "Parking Lot Report\n"
-        for row in spaces_by_row.keys():
+        for row in self.spaces_by_row.keys():
             retval += "*Row " + row + "\n"
-            for space in spaces_by_row[row]:
+            for space in self.spaces_by_row[row]:
                 retval += "   " + str(space) + " : " + str(space.occupant) + "\n"
-    spaces_by_row = {{}}
-    license_plate_dict = {}
-    available_spaces = []
 
 
 
@@ -126,10 +126,10 @@ if __name__ == "__main__":
     l1 = Distance(Distance.Units.FOOT, 17.0)
     l2 = Distance(Distance.Units.FOOT, 19.0)
     l3 = Distance(Distance.Units.FOOT, 21.0)
-    c1 =  Car(w1, l2, w1, string("PINOTNV") );
-    c2 =  Car(w3, l2, w1, string("133ABD") );
-    c3 =  Car(w1, l1, w1, string("166ABC") );
-    c4 =  Car(w1, l2, w1, string("CU LTR") );
+    c1 =  Car(w1, l2, w1, "PINOTNV" );
+    c2 =  Car(w3, l2, w1, "133ABD" );
+    c3 =  Car(w1, l1, w1, "166ABC" );
+    c4 =  Car(w1, l2, w1, "CU LTR" );
 
     p.add_space( w1, l1, 'A', 1 );
     p.add_space( w1, l1, 'A', 2 );
