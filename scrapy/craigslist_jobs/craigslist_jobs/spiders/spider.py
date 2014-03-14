@@ -10,13 +10,11 @@ class JobSpider(CrawlSpider):
 #    allowed_domains = ["craigslist.org","seattle.craigslist.org"]
     start_urls = ["http://seattle.craigslist.org/sof/"]
 
-    extractor = (SgmlLinkExtractor(allow=("index\100\.html"),
-                                   restrict_xpaths=('//a[@class="button next"]',) ))
-#    extractor = (SgmlLinkExtractor(allow=("index\100\.html"),
-#                                   restrict_xpaths=('//a[@class="button next"]',) ))
+    extr = (SgmlLinkExtractor(allow=("index\100\.html"),
+                              restrict_xpaths=('//a[@class="button next"]',) ))
 
     rules = (
-        Rule(extractor,callback='parse_links',follow=True),
+        Rule(extr,callback='parse_links',follow=True),
        )
 
     def parse_start_url(self, response):
@@ -27,7 +25,7 @@ class JobSpider(CrawlSpider):
         items = []
         titles = hxs.xpath('//span[@class="pl"]')
         for title in titles:
-            time.sleep(.1)
+            time.sleep(.2)
             link = ("http://seattle.craiglist.org" +
                     title.xpath("a/@href").extract()[0])
             item = CraigslistJobsItem()

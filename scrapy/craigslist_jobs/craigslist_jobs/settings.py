@@ -14,6 +14,6 @@ NEWSPIDER_MODULE = 'craigslist_jobs.spiders'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'craigslist_jobs (+http://www.yourdomain.com)'
 
-#ITEM_PIPELINES = [
-#     'craigslist_jobs.pipelines.CraigslistJobsPipeline'
-#]
+ITEM_PIPELINES = [
+     'craigslist_jobs.pipelines.CraigslistJobsPipeline'
+]
