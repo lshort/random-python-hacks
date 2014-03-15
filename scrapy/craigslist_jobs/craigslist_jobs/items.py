@@ -2,6 +2,8 @@
 #
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/items.html
+"""Data to grab from the craiglist job entry"""
+
 
 from scrapy.item import Item, Field
 
