@@ -1,3 +1,5 @@
+"""Defining the spider to grab CL jobs from seattle"""
+
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.selector import Selector
@@ -6,6 +8,7 @@ from craigslist_jobs.items import CraigslistJobsItem
 import time
 
 class JobSpider(CrawlSpider):
+    """The actual spicer"""
     name = "craigslist_jobs"
 #    allowed_domains = ["craigslist.org","seattle.craigslist.org"]
     start_urls = ["http://seattle.craigslist.org/sof/"]
@@ -18,13 +21,15 @@ class JobSpider(CrawlSpider):
        )
 
     def parse_start_url(self, response):
+        """Parse the entry URL"""
         return list(self.parse_links(response))
 
     def parse_links(self, response):
+        """Grab the links off the index page"""
         hxs = Selector(response)
         items = []
         titles = hxs.xpath('//span[@class="pl"]')
-        for title in titles:
+        for title in titles[:2]:
             time.sleep(.2)
             link = ("http://seattle.craiglist.org" +
                     title.xpath("a/@href").extract()[0])
@@ -36,6 +41,7 @@ class JobSpider(CrawlSpider):
             yield request
 
     def get_data(self, response):
+        """Followed the links grabbed above, and get the full description"""
         hxs = Selector(response)
         item = response.request.meta['item']
         item['text'] = hxs.xpath('//section[@id="postingbody"]').extract()

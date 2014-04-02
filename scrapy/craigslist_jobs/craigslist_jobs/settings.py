@@ -5,6 +5,8 @@
 #
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #
+"""Scrapy settings for craigslist_jobs project"""
+
 
 BOT_NAME = 'craigslist_jobs'
 
@@ -12,7 +14,7 @@ SPIDER_MODULES = ['craigslist_jobs.spiders']
 NEWSPIDER_MODULE = 'craigslist_jobs.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'craigslist_jobs (+http://www.yourdomain.com)'
+USER_AGENT = 'lees_craigslist_jobs'
 
 ITEM_PIPELINES = [
      'craigslist_jobs.pipelines.CraigslistJobsPipeline'

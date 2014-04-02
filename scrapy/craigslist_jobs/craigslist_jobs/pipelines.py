@@ -3,6 +3,9 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
+"""Pipeline that stores the items in sqlite file"""
+
+
 from scrapy.http import Request
 from scrapy.http import Response
 from scrapy.selector import Selector
@@ -11,6 +14,8 @@ import sqlite3
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+
+
 
 engine = create_engine('sqlite:///seattle_craigslist_jobs.db', echo=False)
 Base = declarative_base()
@@ -26,25 +31,27 @@ class Job(Base):
     external_link_2 = Column(String)
 
     def __init__(self, title, desc, ilink, elink1, elink2):
-        """"""
+        """Creates a Job object"""
         self.title = title
         self.description = desc
         self.internal_link = ilink
         self.external_link_1 = elink1
         self.external_link_2 = elink2
 
-Base.metadata.create_all(engine)
-Session = sessionmaker(bind=engine)
-
 
 class CraigslistJobsPipeline(object):
     def open_spider(self, spider):
+        """Opens the database"""
+        Base.metadata.create_all(engine)
+        Session = sessionmaker(bind=engine)
         self.session = Session()
 
     def close_spider(self, spider):
+        """Commits the changes (no database close needed)"""
         self.session.commit()
 
     def process_item(self, item, spider):
+        """Puts an item into the database, and returns the original item"""
         title = str(item['title'][0])
         int_link = str(item['int_link'])
         if len(item['ext_link'])>0:
