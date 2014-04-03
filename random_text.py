@@ -3,27 +3,26 @@
 import random
 from nltk import *
 from nltk.corpus import brown
-from nltk.book import *
+from nltk.book import text1, text2, text3
 
-def random_text(corpus):
+def random_text(corpus, sentence_count, delim):
     print "*** Starting random text"
     big = bigrams(corpus)
-    (start,ignore) = random.choice(big)
-    occurrences = {}
-    for (a,b) in big:
-        if a in occurrences:
-            occurrences[a].append(b)
-        else:
-            occurrences[a] = [b]
-    sent_count = 3
+    (word,ignore) = random.choice(big)
+    cfd = ConditionalFreqDist(
+        (first,second)
+        for (first, second) in big)
     para = ""
-    while (sent_count > 0 and occurrences[start]):
-        para += start + " "
-        start = random.choice(occurrences[start])
-        if start[0] in ".!":
-            sent_count -= 1
+    while (sentence_count > 0):
+        para += word
+        if word[0] in ".!?":
+            sentence_count -= 1
+            para += delim
+        else:
+            para += " "
+        word = random.choice(cfd[word].samples())
     print para
 
 if __name__=="__main__":
-    random_text(text1)
-    random_text(text2)
+    random_text(text1,4, "___")
+    random_text(text2,3, "  ")
