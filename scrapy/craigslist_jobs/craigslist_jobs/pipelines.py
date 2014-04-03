@@ -14,7 +14,7 @@ import sqlite3
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-
+from nltk import clean_html
 
 
 engine = create_engine('sqlite:///seattle_craigslist_jobs.db', echo=False)
@@ -62,7 +62,7 @@ class CraigslistJobsPipeline(object):
             ext_link_2 = str(item['ext_link'][1])
         else:
             ext_link_2 = "NULL"
-        desc = str(item['text'][0].encode('ascii','ignore'))
+        desc = clean_html(str(item['text'][0].encode('ascii','ignore')))
         new_job = Job(title, desc, int_link, ext_link_1, ext_link_2)
         self.session.add(new_job)
         return item

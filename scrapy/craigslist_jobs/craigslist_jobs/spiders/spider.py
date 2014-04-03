@@ -6,6 +6,8 @@ from scrapy.selector import Selector
 from scrapy.http import Request
 from craigslist_jobs.items import CraigslistJobsItem
 import time
+from nltk import clean_html
+
 
 class JobSpider(CrawlSpider):
     """The actual spicer"""
@@ -29,7 +31,7 @@ class JobSpider(CrawlSpider):
         hxs = Selector(response)
         items = []
         titles = hxs.xpath('//span[@class="pl"]')
-        for title in titles[:2]:
+        for title in titles:
             time.sleep(.2)
             link = ("http://seattle.craiglist.org" +
                     title.xpath("a/@href").extract()[0])
