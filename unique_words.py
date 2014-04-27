@@ -80,7 +80,7 @@ def unique_words(url):
                   url_words )
 
 if __name__=="__main__":
-    wlist = (['tom','the','mary','torn'])
+    wlist = (['tom','the','mary','torn','zzz','zulu', 'i','igloo'])
     foo = build_trie(wlist)
     for w in wlist:
         print unique_part(foo,w)

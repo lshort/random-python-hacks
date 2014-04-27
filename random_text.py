@@ -4,6 +4,19 @@ import random
 from nltk import *
 from nltk.util import trigrams
 from nltk.book import text1, text2, text3
+from nltk.corpus import gutenberg
+import textwrap
+
+def best_n_sents(corpus_file, n):
+    print "*** Printing best N sentences"
+    words = gutenberg.words(corpus_file)
+    fd = FreqDist(words)
+    sents = gutenberg.sents(corpus_file)
+    ss= sorted(sents, reverse=True, key=(lambda x:sum(fd[w] for w in x)) )
+    for i in range(n):
+        for line in textwrap.wrap(' '.join(ss[i])):
+            print line
+
 
 def random_text_bigram(corpus, sentence_count, delim):
     """Generate some random sentences in the style of the corpus.
@@ -52,7 +65,8 @@ def random_text_trigram(corpus, sentence_count, delim):
     print para
 
 if __name__=="__main__":
-    random_text_bigram(text1,4, "  ")
-    random_text_bigram(text2,3, "  ")
-    random_text_trigram(text1,4, "  ")
-    random_text_trigram(text2,3, "  ")
+#    random_text_bigram(text1,4, "  ")
+#    random_text_bigram(text2,3, "  ")
+#    random_text_trigram(text1,4, "  ")
+#    random_text_trigram(text2,3, "  ")
+    best_n_sents('austen-emma.txt',25)
